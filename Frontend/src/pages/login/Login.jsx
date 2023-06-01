@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./login.css";
-import jwtDecode from "jwt-decode"
-import { GoogleLogin } from "@react-oauth/google";
+import jwtDecode from "jwt-decode";
+import { GoogleLoginButton } from "react-social-login-buttons";
+import { LoginSocialGoogle } from "reactjs-social-login";
 
 const Login = ({ setisLogedIn }) => {
   const [userEmail, setuserEmail] = useState("");
@@ -15,25 +16,6 @@ const Login = ({ setisLogedIn }) => {
   const passwordPattern =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
   const navigate = useNavigate();
-
-
-  const handleLoginSuccess = (response) => {
-    console.log("hi")
-    console.log(response);
-    const tokenId = response.tokenId
-    console.log(tokenId)
-    axios.post('http://localhost:5000/api/v1/auth/google',{tokenId})
-    .then(()=>{
-      navigate('/')
-    })
-    .catch((error)=>{
-      console.log("hi")
-      console.log(error)
-    })
-  };
-  const handleLoginFailure = (error) => {
-    console.log(error);
-  };
 
   function validateForm(email, password) {
     console.log("email", email);
@@ -65,19 +47,16 @@ const Login = ({ setisLogedIn }) => {
       axios
         .post("http://localhost:5000/api/v1/auth/login", user)
         .then((res) => {
-          if(res.data.success===true){
-            const token = res.data.token
-            const decoded = jwtDecode(token)
-            const userId = decoded.id
+          if (res.data.success === true) {
+            const token = res.data.token;
+            const decoded = jwtDecode(token);
+            sessionStorage.setItem("userId", decoded.id );
             setisLogedIn(true);
-            sessionStorage.setItem('userId',userId)
-            navigate('/home')
             
+            navigate("/home");
+          } else {
+            setisLogedIn(false);
           }
-          else{
-            setisLogedIn(false)
-          }
-         
         })
         .catch((error) => {
           setCredErr(error.response.data.error);
@@ -121,7 +100,14 @@ const Login = ({ setisLogedIn }) => {
             {passworErr && <p style={{ color: "red" }}>{passworErr}</p>}
             {credErr && <p style={{ color: "red" }}>{credErr}</p>}
             <button className="loginButton">Log In</button>
-            <span className="loginForgot" onClick={()=>{navigate('/forgotPassword')}} >Forgot Password?</span>
+            <span
+              className="loginForgot"
+              onClick={() => {
+                navigate("/forgotPassword");
+              }}
+            >
+              Forgot Password?
+            </span>
             <button
               className="loginRegisterButton"
               onClick={() => navigate("/register")}
@@ -129,16 +115,41 @@ const Login = ({ setisLogedIn }) => {
               Create a New Account
             </button>
             <div className="googleButton">
-              <GoogleLogin onSuccess={handleLoginSuccess} onError={handleLoginFailure}></GoogleLogin>
-
-              {/* <GoogleLogin
-                clientId="588708527535-2ub345bg4jcbaklujqj6ttkr5ihd4gcl.apps.googleusercontent.com"
-                buttontext="Log in with Google"
-                onSuccess={handleLoginSuccess}
-                onFailure={handleLoginFailure}
-                cookiePolicy={"single_host_origin"}
-                /> */}
-            
+              <LoginSocialGoogle
+                client_id={
+                  "588708527535-1s5esn1mfa0q9b5ods1tiv8mc4kdljak.apps.googleusercontent.com"
+                }
+                scope="openid profile email"
+                discoveryDocs="claims supported"
+                access_type="offline"
+                onResolve={({ provider, data }) => {
+                  console.log(data.picture);
+                  const user = {
+                    userName: data.name,
+                    userEmail: data.email,
+                    userPassword: "Password@123",
+                    profilepic: data.picture,
+                  };
+                  axios
+                    .post("http://localhost:5000/api/v1/auth/register", user)
+                    .then((res) => {
+                      if (res.data.success === true);
+                      const token = res.data.token;
+                      const decoded = jwtDecode(token);
+                      const userId = decoded.id;
+                      console.log(userId);
+                      setisLogedIn(true);
+                      sessionStorage.setItem("userId", userId);
+                      sessionStorage.setItem("google", true);
+                      navigate("/home");
+                    });
+                }}
+                onReject={(err) => {
+                  console.log(err);
+                }}
+              >
+                <GoogleLoginButton></GoogleLoginButton>
+              </LoginSocialGoogle>
             </div>
           </form>
         </div>

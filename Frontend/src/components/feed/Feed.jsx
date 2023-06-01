@@ -3,24 +3,35 @@ import axios from "axios";
 import Post from "../post/Post";
 import Share from "../share/Share";
 import "./feed.css";
-const Feed = () => {
+const Feed = ({myPosts, savedPost, userPost}) => {
   const [posts, setPosts] = useState([]);
-  
+
   useEffect(()=>{
-	axios.get('http://localhost:5000/api/v1/posts').then((res)=>{
-		console.log(res)
-    setPosts(res.data.data)
-    // console.log(posts)
-	})
-  },[])
+    if(myPosts){
+      setPosts(myPosts)
+      }
+    if(savedPost){
+      setPosts(savedPost)
+    }
+    if(userPost){
+      setPosts(userPost)
+    }
+    else if(!myPosts && !savedPost){
+     axios.get('http://localhost:5000/api/v1/posts').then((res)=>{
+      setPosts(res.data.data);
+     });
+    
+
+    }
+ },[myPosts,savedPost,userPost]);
  
   return (
     <div className="feed">
       <div className="feedWrapper">
         <Share></Share>
 
-		{posts.map((post)=>(<Post key={post.id} post={post}></Post>))}
-        <Post></Post>
+		{posts.map((post)=>(<Post key={post.id} post={post} myPosts = {myPosts} setPosts ={setPosts} savedPost = {savedPost}></Post>))}
+        
       </div>
     </div>
   );
