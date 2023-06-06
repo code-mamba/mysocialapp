@@ -1,6 +1,7 @@
+import { useEffect, useState } from "react";
 import "./rightbar.css";
+import axios from "axios";
 const Rightbar = ({ profile }) => {
-
   const HomeRightbar = () => {
     return (
       <>
@@ -28,60 +29,60 @@ const Rightbar = ({ profile }) => {
       </>
     );
   };
-  const ProfileRightbar = () =>{
-	return(
-		<>
-		<h4 className="rightbarTitle" >User information </h4>
-		<div className="rightbarInfo">
-			<div className="rightbarInfoItem">
-				<span className="rightbarInfoKey">City:</span>
-				<span className="rightbarInfoValue">New York</span>
-			</div>
-			<div className="rightbarInfoItem">
-				<span className="rightbarInfoKey">From:</span>
-				<span className="rightbarInfoValue">Madrid</span>
-			</div>
-			<div className="rightbarInfoItem">
-				<span className="rightbarInfoKey">Relationship:</span>
-				<span className="rightbarInfoValue">single</span>
-			</div>
-			<h4 className="rightbarTitle">User friends</h4>
-			<div className="rightbarFollowings">
-				<div className="rightbarFollowing">
-					<img src="assets/person/2.jpg" alt="" className="rightbarFollowingImg" />
-					<span className="rightbarFollowingName">John Carter</span>
-				</div>
-				<div className="rightbarFollowing">
-					<img src="assets/person/3.jpg" alt="" className="rightbarFollowingImg" />
-					<span className="rightbarFollowingName">John Carter</span>
-				</div>
-				<div className="rightbarFollowing">
-					<img src="assets/person/4.jpg" alt="" className="rightbarFollowingImg" />
-					<span className="rightbarFollowingName">John Carter</span>
-				</div>
-				<div className="rightbarFollowing">
-					<img src="assets/person/5.jpg" alt="" className="rightbarFollowingImg" />
-					<span className="rightbarFollowingName">John Carter</span>
-				</div>
-				<div className="rightbarFollowing">
-					<img src="assets/person/6.jpg" alt="" className="rightbarFollowingImg" />
-					<span className="rightbarFollowingName">John Carter</span>
-				</div>
-				<div className="rightbarFollowing">
-					<img src="assets/person/6.jpg" alt="" className="rightbarFollowingImg" />
-					<span className="rightbarFollowingName">John Carter</span>
-				</div>
-			</div>
-		</div>
-		</>
-	)
-  }
+  const ProfileRightbar = () => {
+    const [myFriends, setMyFriends] = useState([]);
+	const defaultPic = "assets/person/default-avatar.jpg";
+    useEffect(() => {
+      const userId = sessionStorage.getItem("userId");
+      axios
+        .get(`http://localhost:5000/api/v1/getfriends/${userId}`)
+        .then((res) => {
+          console.log("rightbar response", res.data.data);
+          setMyFriends(res.data.data);
+        });
+    }, []);
+    return (
+      <>
+        <h4 className="rightbarTitle">User information </h4>
+        <div className="rightbarInfo">
+          <div className="rightbarInfoItem">
+            <span className="rightbarInfoKey">City:</span>
+            <span className="rightbarInfoValue">New York</span>
+          </div>
+          <div className="rightbarInfoItem">
+            <span className="rightbarInfoKey">From:</span>
+            <span className="rightbarInfoValue">Madrid</span>
+          </div>
+          <div className="rightbarInfoItem">
+            <span className="rightbarInfoKey">Relationship:</span>
+            <span className="rightbarInfoValue">single</span>
+          </div>
+          <h4 className="rightbarTitle">User friends</h4>
+
+          <div className="rightbarFollowings">
+            {myFriends.map((friend) => (
+              <div className="rightbarFollowing">
+                <img
+                  src={ friend.profilepic === "no-photo.jpg"
+				  ? defaultPic
+				  : friend.profilepic}
+                  alt=""
+                  className="rightbarFollowingImg"
+                />
+                <span className="rightbarFollowingName">{friend.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </>
+    );
+  };
   return (
     <div className="rightbar">
       <div className="rightbarWrapper">
-		{!profile&&<HomeRightbar></HomeRightbar>}
-		<ProfileRightbar></ProfileRightbar>
-	  </div>
+        {!profile && <HomeRightbar></HomeRightbar>}
+        <ProfileRightbar></ProfileRightbar>
+      </div>
     </div>
   );
 };

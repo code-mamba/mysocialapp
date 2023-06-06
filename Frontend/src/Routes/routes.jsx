@@ -13,6 +13,7 @@ import FormDialogue from "../pages/FormDialogue/FormDialogue";
 import RequestNotification from "../pages/RequestNotification/RequestNotification";
 import UserProfile from "../pages/UserProfile/UserProfile";
 import FriendsPost from "../pages/FriendsPost/FriendsPost";
+import Messenger from "../pages/Messenger/Messenger";
 
 
 
@@ -38,6 +39,7 @@ const RoutePage = () => {
       <Route path="/requestnotification" element={<RequestNotification></RequestNotification>}></Route>
       <Route path="/userprofile/:userId" element ={<UserProfile></UserProfile>}></Route>
       <Route path="/friendspost" element={<FriendsPost></FriendsPost>}></Route>
+      <Route path="/messenger" element={<Messenger></Messenger>}></Route>
     </Routes>
   );
 };

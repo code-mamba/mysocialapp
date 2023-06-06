@@ -22,7 +22,7 @@ const logout = () =>{
 					<Home className="sidebarIcon"></Home>
 					<span className="sidebarListItemText">Home</span>
 				</li>
-				<li className="sidebarListItem">
+				<li className="sidebarListItem" onClick={()=>{navigate('/messenger')}}>
 					<Chat className="sidebarIcon"></Chat>
 					<span className="sidebarListItemText">Chats</span>
 				</li>
@@ -57,52 +57,7 @@ const logout = () =>{
 				</li>
 			</ul>
 			<hr className="sidebarHr"></hr>
-			<ul className="sidebarFriendList">
-				<li className="sidebarFriend" >
-					<img className="sidebarFriendImg" src="/assets/person/2.jpg" alt="" ></img>
-					<span className="sidebarFriend">Jane Doe</span>
-				</li>
-				<li className="sidebarFriend" >
-					<img className="sidebarFriendImg" src="/assets/person/2.jpg" alt="" ></img>
-					<span className="sidebarFriend">Jane Doe</span>
-				</li>
-				<li className="sidebarFriend" >
-					<img className="sidebarFriendImg" src="/assets/person/2.jpg" alt="" ></img>
-					<span className="sidebarFriend">Jane Doe</span>
-				</li>
-				<li className="sidebarFriend" >
-					<img className="sidebarFriendImg" src="/assets/person/2.jpg" alt="" ></img>
-					<span className="sidebarFriend">Jane Doe</span>
-				</li>
-				<li className="sidebarFriend" >
-					<img className="sidebarFriendImg" src="/assets/person/2.jpg" alt="" ></img>
-					<span className="sidebarFriend">Jane Doe</span>
-				</li>
-				<li className="sidebarFriend" >
-					<img className="sidebarFriendImg" src="/assets/person/2.jpg" alt="" ></img>
-					<span className="sidebarFriend">Jane Doe</span>
-				</li>
-				<li className="sidebarFriend" >
-					<img className="sidebarFriendImg" src="/assets/person/2.jpg" alt="" ></img>
-					<span className="sidebarFriend">Jane Doe</span>
-				</li>
-				<li className="sidebarFriend" >
-					<img className="sidebarFriendImg" src="/assets/person/2.jpg" alt="" ></img>
-					<span className="sidebarFriend">Jane Doe</span>
-				</li>
-				<li className="sidebarFriend" >
-					<img className="sidebarFriendImg" src="/assets/person/2.jpg" alt="" ></img>
-					<span className="sidebarFriend">Jane Doe</span>
-				</li>
-				<li className="sidebarFriend" >
-					<img className="sidebarFriendImg" src="/assets/person/2.jpg" alt="" ></img>
-					<span className="sidebarFriend">Jane Doe</span>
-				</li>
-				<li className="sidebarFriend" >
-					<img className="sidebarFriendImg" src="/assets/person/2.jpg" alt="" ></img>
-					<span className="sidebarFriend">Jane Doe</span>
-				</li>
-			</ul>
+		
 			<button onClick = {()=>logout()} className="sidebarButton">Log Out</button>
 		</div>
 	</div>

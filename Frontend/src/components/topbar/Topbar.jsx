@@ -40,7 +40,7 @@ const Topbar = () => {
   return (
     <>
       <div className="topbarContainer">
-        <div className="topbarLeft">
+        <div className="topbarLeft" onClick={()=>navigate('/home')}>
           <span className="logo">MyFB</span>
         </div>
         <div className="topbarRight">

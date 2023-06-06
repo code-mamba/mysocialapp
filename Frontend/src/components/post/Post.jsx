@@ -4,7 +4,6 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 const Post = ({ post, myPosts, setPosts, savedPost }) => {
-  console.log("inside post");
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
   const toggleDropdown = () => {
@@ -62,7 +61,7 @@ const Post = ({ post, myPosts, setPosts, savedPost }) => {
   };
   const navigateToUserProfile = () => {
     const myId = sessionStorage.getItem("userId");
-    if (post.Id === myId) {
+    if (post.userId === myId) {
       console.log(post._id)
       console.log(myId)
       navigate("/myprofile");
