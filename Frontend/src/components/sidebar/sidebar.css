@@ -20,7 +20,7 @@
 .sidebarListItem{
 	display: flex;
 	align-items: center;
-	margin-bottom: 10px;
+	margin-bottom: 20px;
 	cursor: pointer;
 	height: 30px;
 	background-size: 100px;

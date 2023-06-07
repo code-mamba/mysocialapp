@@ -3,6 +3,7 @@ import { MoreHoriz } from "@mui/icons-material";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import {format} from 'timeago.js'
 const Post = ({ post, myPosts, setPosts, savedPost }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
@@ -85,7 +86,7 @@ const Post = ({ post, myPosts, setPosts, savedPost }) => {
               alt=""
             ></img>
             <span className="postUsername">{post.userName}</span>
-            <span className="postDate">{post.date}</span>
+            <span className="postDate">{format(post.date)}</span>
           </div>
           <div className="postTopRight">
             <div className="option" onClick={toggleDropdown}>

@@ -35,14 +35,8 @@ const logout = () =>{
 					<Groups className="sidebarIcon"></Groups>
 					<span className="sidebarListItemText">Friends post</span>
 				</li>
-				<li className="sidebarListItem">
-					<Bookmark className="sidebarIcon"></Bookmark>
-					<span className="sidebarListItemText">Bookmarks</span>
-				</li>
-				<li className="sidebarListItem">
-					<QuestionAnswer className="sidebarIcon"></QuestionAnswer>
-					<span className="sidebarListItemText">Questions</span>
-				</li>
+			
+			
 				<li className="sidebarListItem" onClick={()=>navigate('/savedPost')}>
 					<Bookmark className="sidebarIcon"></Bookmark>
 					<span className="sidebarListItemText">Saved</span>
@@ -50,10 +44,6 @@ const logout = () =>{
 				<li className="sidebarListItem">
 					<CalendarMonth className="sidebarIcon"></CalendarMonth>
 					<span className="sidebarListItemText">Events</span>
-				</li>
-				<li className="sidebarListItem">
-					<School className="sidebarIcon"></School>
-					<span className="sidebarListItemText">Courses</span>
 				</li>
 			</ul>
 			<hr className="sidebarHr"></hr>

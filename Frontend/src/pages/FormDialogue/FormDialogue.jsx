@@ -11,18 +11,24 @@ const FormDialogue = ({open,setOpen}) =>{
 	const[bio,setBio] = useState('')
 	const[name, setName] = useState('')
 	const[city, setCity] = useState('')
+	const[profilePic, setProfilePic] = useState(null)
+	const[coverImg, setCoverImg] = useState(null)
 	const[country,setCountry] = useState('')
 	const[relationship, setRelationship] = useState('')
 	const handleClose = () => {
 		setOpen(false);
 	  };
-const handleFileChange = (e) =>{
-		const files = e.target.files
-		const formData = new FormData()
-		for(let i =0;i<files.length;i++){
-			formData.append('files',files[i])
-		}
+const profileImgChange = (e) =>{
+		// const files = e.target.files
+		// const formData = new FormData()
+		// for(let i =0;i<files.length;i++){
+		// 	formData.append('files',files[i])
+		// }
+		setProfilePic(e.target.files[0])
 
+}
+const coverImageChange = (e) =>{
+	setCoverImg(e.target.files[0])
 }
 	const handleSubmit = async() =>{
 		const formData = new FormData()
@@ -30,6 +36,8 @@ const handleFileChange = (e) =>{
 		formData.append('bio',bio)
 		formData.append('city',country);
 		formData.append('relationship',relationship)
+		formData.append('profilePic',profilePic)
+		formData.append('coverImg', coverImg)
 		try{
 			const userId = sessionStorage.getItem('userId')
 			
@@ -51,13 +59,13 @@ const handleFileChange = (e) =>{
 			<input
               className="Input"
               type="file"
-              onChange={handleFileChange}
+              onChange={profileImgChange}
             ></input>
 				<label><strong>Cover photo</strong></label>
 			<input
               className="Input"
               type="file"
-              onChange={handleFileChange}
+              onChange={coverImageChange}
             ></input>
 			<input
               className="Input"
