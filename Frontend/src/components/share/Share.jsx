@@ -39,7 +39,7 @@ const Share = () => {
         <div className="shareTop">
           <img
             className="shareProfileImg"
-            src={user.profilepic === 'no-photo.jpg'?defaultProfile:user.profilepic}
+            src={user.profilepic === 'no-photo.jpg'?defaultProfile:`http://localhost:5000/public/${user.profilepic}`}
             alt=""
           ></img>
           <input

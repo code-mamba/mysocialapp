@@ -15,15 +15,11 @@ const FormDialogue = ({open,setOpen}) =>{
 	const[coverImg, setCoverImg] = useState(null)
 	const[country,setCountry] = useState('')
 	const[relationship, setRelationship] = useState('')
+	const[Dob,setDob] = useState(null)
 	const handleClose = () => {
 		setOpen(false);
 	  };
 const profileImgChange = (e) =>{
-		// const files = e.target.files
-		// const formData = new FormData()
-		// for(let i =0;i<files.length;i++){
-		// 	formData.append('files',files[i])
-		// }
 		setProfilePic(e.target.files[0])
 
 }
@@ -32,14 +28,26 @@ const coverImageChange = (e) =>{
 }
 	const handleSubmit = async() =>{
 		const formData = new FormData()
+		const dobDate = new Date(Dob)
 		formData.append('name',name)
 		formData.append('bio',bio)
-		formData.append('city',country);
+		formData.append('city',city);
+		formData.append('country',country)
 		formData.append('relationship',relationship)
-		formData.append('profilePic',profilePic)
-		formData.append('coverImg', coverImg)
+		formData.append('dob',dobDate)
+		// formData.append('profilePic',profilePic)
+		// formData.append('coverImg', coverImg)
+		if(profilePic){
+			formData.append('profilePic',profilePic)
+		}
+		if(coverImg){
+			formData.append('coverImg',coverImg)
+		}
 		try{
-			const userId = sessionStorage.getItem('userId')
+			const myId = sessionStorage.getItem('userId')
+			axios.post(`http://localhost:5000/api/v1/users/${myId}`,formData)
+			setOpen(false)
+			
 			
 		}
 		catch(err){
@@ -102,6 +110,8 @@ const coverImageChange = (e) =>{
               onChange={(e) => setRelationship(e.target.value)}
               placeholder="Relationship"
             />
+			<label><strong>Dob</strong></label>
+			<input type="date" id="date" value={Dob} onChange={(e)=>{setDob(e.target.value)}}></input>
 			</div>
 		  </DialogContent>
 		  <DialogActions>

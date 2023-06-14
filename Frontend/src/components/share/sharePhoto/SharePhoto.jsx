@@ -37,21 +37,13 @@ const SharePhoto = ({
         onClose()
         
       })
-      // .then((response) => {
-      //   console.log("successfully uploaded");
 
-      //   console.log(response);
-      //   setCaption("");
-      //   onClose();
-      // })
       .catch((error) => {
         console.log(error);
       });
   };
-  const saveChanges = (e) =>{
-     e.preventDefault()
-     const formDate = new FormData()
-  }
+
+  
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
@@ -71,9 +63,10 @@ const SharePhoto = ({
             <input
               className="chooseFile"
               type="file"
+              accept="image/*,video/*"
               onChange={handleFileChange}
             ></input>
-          {caption}
+       
         </DialogContent>
         <DialogActions>
           <Button onClick={handleSubmit}>Submit</Button>

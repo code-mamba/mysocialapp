@@ -53,7 +53,7 @@ const Profile = () => {
             <div className="profileCover">
               <img
                 className="profileCoverImg"
-                src="assets/posts/3.jpg"
+                src={`http://localhost:5000/public/${user.coverImage}`}
                 alt=""
               ></img>
               <div className="profile">
@@ -62,7 +62,7 @@ const Profile = () => {
                   src={
                     user.profilepic === "no-photo.jpg"
                       ? defaultPic
-                      : user.profilepic
+                      :`http://localhost:5000/public/${user.profilepic}` 
                   }
                   alt=""
                 ></img>
@@ -77,7 +77,7 @@ const Profile = () => {
             </div>
             <div className="profileInfo">
               <h4 className="profileInfoName">{user.name}</h4>
-              <span className="profileInfoDesc">Hello My friends!</span>
+              <span className="profileInfoDesc">{user.bio}</span>
               <div className="profile-stat">
                 <div>
                     <span class="profile-stat-count"><strong>{postCount}</strong>posts</span>

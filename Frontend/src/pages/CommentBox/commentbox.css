@@ -1,0 +1,65 @@
+.comment-section {
+	max-width: 600px;
+	margin: 0 auto;
+	padding: 20px;
+	flex-direction: column;
+	max-height: 600px;
+  }
+  
+  .comment-list {
+	margin-top: 20px;
+	
+  }
+  
+  .comment {
+	display: flex;
+	margin-bottom: 15px;
+	
+  }
+  
+  .comment-avatar img {
+	width: 30px;
+	height: 30px;
+	background-color: #ccc;
+	border-radius: 50%;
+	margin-right: 10px;
+  }
+  
+  .comment-content {
+	flex: 1;
+  }
+  
+  .comment-author {
+	font-weight: bold;
+	margin-bottom: 5px;
+  }
+  
+  .comment-text {
+	margin-bottom: 10px;
+  }
+  
+  .comment-form {
+	margin-top: 20px;
+	display: fixed;
+	bottom: 10px;
+  }
+  
+  .comment-form input[type="text"] {
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 10px;
+	
+  }
+  
+  .comment-form button {
+	padding: 10px 20px;
+	background-color: #4267B2;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	margin-bottom: 15px;
+  }
+  .DialogBox{
+	width: 400px;
+	height: 600px;
+  }

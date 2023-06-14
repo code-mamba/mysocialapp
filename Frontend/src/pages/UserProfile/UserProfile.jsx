@@ -24,10 +24,12 @@ const UserProfile = () => {
    useEffect(()=>{
     const myId = sessionStorage.getItem("userId")
   	axios.get(`http://localhost:5000/api/v1/auth/me/${userId}`).then((res)=>{
+      
   		setUser(res.data.data);
       setFriendsCount(res.data.data.friends)
   		axios.get(`http://localhost:5000/api/v1/posts/${userId}`).then((res)=>{
   			setPost(res.data.data);
+        console.log("--------",post)
   			setNoOfPost(res.data.data)
   		}).then(()=>{
         axios.get(`http://localhost:5000/api/v1/getfriends/${myId}/${userId}`).then((response)=>{
@@ -41,6 +43,7 @@ const UserProfile = () => {
       })
   	}).catch((err)=>{console.log(err)})
    },[isFriend])
+
 
   const addFriend = () => {
     const myId = sessionStorage.getItem("userId");
@@ -83,7 +86,7 @@ const UserProfile = () => {
                   className="profileUserImg"
                   src={ user.profilepic === "no-photo.jpg"
                   ? defaultPic
-                  : user.profilepic}
+                  : `http://localhost:5000/public/${user.profilepic}`}
                   alt=""
                 ></img>
               </div>

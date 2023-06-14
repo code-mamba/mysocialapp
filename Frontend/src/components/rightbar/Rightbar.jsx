@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import "./rightbar.css";
 import axios from "axios";
-const Rightbar = ({ profile }) => {
+const Rightbar = () => {
+ 
+  const myId = sessionStorage.getItem('userId')
   const HomeRightbar = () => {
+  
     return (
       <>
         <div className="birthdayContainer">
@@ -31,6 +34,7 @@ const Rightbar = ({ profile }) => {
   };
   const ProfileRightbar = () => {
     const [myFriends, setMyFriends] = useState([]);
+    const[userInfo, setUserInfo] = useState([])
 	const defaultPic = "assets/person/default-avatar.jpg";
     useEffect(() => {
       const userId = sessionStorage.getItem("userId");
@@ -39,25 +43,34 @@ const Rightbar = ({ profile }) => {
         .then((res) => {
           console.log("rightbar response", res.data.data);
           setMyFriends(res.data.data);
+          
         });
     }, []);
+    useEffect(()=>{
+     
+      axios.get(`http://localhost:5000/api/v1/auth/me/${myId}`).then((res)=>{
+        console.log(res.data.data)
+        setUserInfo(res.data.data)
+      })
+    },[])
+    console.log("line55",userInfo)
     return (
       <>
-        <h4 className="rightbarTitle">User information </h4>
+        <h4 className="rightbarTitle">Your information </h4>
         <div className="rightbarInfo">
           <div className="rightbarInfoItem">
             <span className="rightbarInfoKey">City:</span>
-            <span className="rightbarInfoValue">New York</span>
+            <span className="rightbarInfoValue">{userInfo.city}</span>
           </div>
           <div className="rightbarInfoItem">
             <span className="rightbarInfoKey">From:</span>
-            <span className="rightbarInfoValue">Madrid</span>
+            <span className="rightbarInfoValue">{userInfo.country}</span>
           </div>
           <div className="rightbarInfoItem">
             <span className="rightbarInfoKey">Relationship:</span>
-            <span className="rightbarInfoValue">single</span>
+            <span className="rightbarInfoValue">{userInfo.relationship}</span>
           </div>
-          <h4 className="rightbarTitle">User friends</h4>
+          <h4 className="rightbarTitle">Your friends</h4>
 
           <div className="rightbarFollowings">
             {myFriends.map((friend) => (
@@ -65,7 +78,7 @@ const Rightbar = ({ profile }) => {
                 <img
                   src={ friend.profilepic === "no-photo.jpg"
 				  ? defaultPic
-				  : friend.profilepic}
+				  : `http://localhost:5000/public/${friend.profilepic}`}
                   alt=""
                   className="rightbarFollowingImg"
                 />
@@ -80,7 +93,7 @@ const Rightbar = ({ profile }) => {
   return (
     <div className="rightbar">
       <div className="rightbarWrapper">
-        {!profile && <HomeRightbar></HomeRightbar>}
+        <HomeRightbar></HomeRightbar>
         <ProfileRightbar></ProfileRightbar>
       </div>
     </div>

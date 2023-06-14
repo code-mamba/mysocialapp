@@ -15,6 +15,7 @@
 }
 .chatBox{
 	flex:5.5;
+	background-color:white;
 }
 .chatBoxWrapper{
 	position: relative;
@@ -38,8 +39,10 @@
 }
 .chatMessageInput{
 	width: 80%;
-	height: 90px;
+	height: 20px;
 	padding:10px;
+	margin-bottom: 20px;
+	margin-left: 30px;
 }
 .chatSubmitButton{
 	width: 70px;

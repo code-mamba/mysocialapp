@@ -3,7 +3,7 @@ import axios from "axios";
 import Post from "../post/Post";
 import Share from "../share/Share";
 import "./feed.css";
-const Feed = ({myPosts, savedPost, userPost,friendsPost}) => {
+const Feed = ({myPosts, savedPost, userPost,friendsPost,videos}) => {
   const [posts, setPosts] = useState([]);
 
   useEffect(()=>{
@@ -20,14 +20,17 @@ const Feed = ({myPosts, savedPost, userPost,friendsPost}) => {
       setPosts(friendsPost)
       console.log("new",posts)
     }
-    else if(!myPosts && !savedPost && !friendsPost){
+    if(videos){
+      setPosts(videos)
+    }
+    else if(!myPosts && !savedPost && !friendsPost && !userPost){
      axios.get('http://localhost:5000/api/v1/posts').then((res)=>{
       setPosts(res.data.data);
      });
     
 
     }
- },[myPosts,savedPost,userPost,friendsPost]);
+ },[myPosts,savedPost,userPost,friendsPost,videos]);
  
   return (
     <div className="feed">

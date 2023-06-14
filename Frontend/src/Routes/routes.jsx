@@ -14,8 +14,8 @@ import RequestNotification from "../pages/RequestNotification/RequestNotificatio
 import UserProfile from "../pages/UserProfile/UserProfile";
 import FriendsPost from "../pages/FriendsPost/FriendsPost";
 import Messenger from "../pages/Messenger/Messenger";
-
-
+import Videos from "../pages/Videos/Videos";
+import CommentBox from "../pages/CommentBox/CommentBox";
 
 
 const RoutePage = () => {
@@ -39,7 +39,9 @@ const RoutePage = () => {
       <Route path="/requestnotification" element={<RequestNotification></RequestNotification>}></Route>
       <Route path="/userprofile/:userId" element ={<UserProfile></UserProfile>}></Route>
       <Route path="/friendspost" element={<FriendsPost></FriendsPost>}></Route>
+      <Route path="/videos" element={<Videos></Videos>} ></Route>
       <Route path="/messenger" element={<Messenger></Messenger>}></Route>
+      <Route path="/comments" element={<CommentBox></CommentBox>}></Route>
     </Routes>
   );
 };

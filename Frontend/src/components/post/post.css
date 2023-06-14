@@ -38,7 +38,7 @@
 .postCenter{
 	margin: 20px 0;
 }
-.postImg{
+.postImg,.postVideo{
 	margin-top: 20px;
 	width: 100%;
 	max-height: 500px;

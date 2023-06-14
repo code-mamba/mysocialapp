@@ -8,7 +8,8 @@ import "./messenger.css";
 import {io} from "socket.io-client"
 
 const Messenger = () => {
-  const[conversations, setConversations] = useState([])
+  
+  const[myFriends, setMyfriends] = useState([])
   const[currentChat, setCurrentChat] = useState(null)
   const [messages, setMessages] = useState([])
   const[newMessage, setnewMessage] = useState("")
@@ -41,14 +42,15 @@ const Messenger = () => {
     })
   },[])
 
+// get friends and save it in my friends
   useEffect(()=>{
     const myId = sessionStorage.getItem("userId")
-    axios.get(`http://localhost:5000/api/v1/conversation/${myId}`).then((res)=>{
-     
-      setConversations(res.data.conversation)
+    axios.get(`http://localhost:5000/api/v1/getfriends/${myId}`).then((res)=>{
+      console.log("my friends",res.data.data)
+      setMyfriends(res.data.data)
     })
-    },[messages])
- 
+  },[])
+
    useEffect(()=>{
     const getMessages = async () =>{
       try{
@@ -103,12 +105,7 @@ const receiverId = currentChat.members.find(member=> member!==myId)
               placeholder="Search for friends"
               className="chatMenuInput"
             ></input>
-          
-            {conversations.map((conversation)=>(<>
-            <div onClick={()=>{setCurrentChat(conversation)}}>
-            <Conversation conversation={conversation} myId={myId}></Conversation>
-            </div>
-            </>))}
+            <Conversation myFriends={myFriends}  setCurrentChat={setCurrentChat}></Conversation>
           </div>
         </div>
         <div className="chatBox">
@@ -126,8 +123,8 @@ const receiverId = currentChat.members.find(member=> member!==myId)
 			
             </div>
           
-            <div className="chatBoxBottom">
-			<textarea className="chatMessageInput" placeholder="write something..." value={newMessage} onChange={(e)=>{setnewMessage(e.target.value)}}></textarea>
+            <div className="divchatBoxBottom">
+			<input className="chatMessageInput" placeholder="write something..." value={newMessage} onChange={(e)=>{setnewMessage(e.target.value)}}></input>
 			<button className="chatSubmitButton" onClick={handleSubmit}>send</button>
 			</div>
       </>:<span className="noConversationText">Open a conversation to start a chat</span>

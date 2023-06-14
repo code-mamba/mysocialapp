@@ -1,15 +1,30 @@
 import "./post.css";
-import { MoreHoriz } from "@mui/icons-material";
+import { MoreHoriz,FavoriteBorder} from "@mui/icons-material";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {format} from 'timeago.js'
+import CommentBox from "../../pages/CommentBox/CommentBox";
 const Post = ({ post, myPosts, setPosts, savedPost }) => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const[open, setOpen] = useState(false) 
+  const[isLiked,setIsLiked] = useState(false)
+  const[like, setLike] = useState(post.likedby.length)
   const navigate = useNavigate();
   const toggleDropdown = () => {
     setShowDropdown((prevState) => !prevState);
   };
+
+  const likeHandler = () =>{
+    setLike(isLiked?like-1:like+1)
+    setIsLiked(!isLiked)
+    if(isLiked === true){
+      console.log("unlike your post")
+    }
+    else if(isLiked === false){
+      console.log("like your post")
+    }
+  }
   const handleSave = async () => {
     const myUserId = sessionStorage.getItem("userId");
     const postId = post._id;
@@ -118,24 +133,32 @@ const Post = ({ post, myPosts, setPosts, savedPost }) => {
         </div>
         <div className="postCenter">
           <span className="postText">{post.caption}</span>
-          <img
+          {post.photo.includes("mp4") ? (
+            <video className="postVideo" controls>
+              <source
+                src={`http://localhost:5000/public/${post.photo}`}
+                type="video/mp4"
+              />
+            </video>):(<img
             className="postImg"
             src={`http://localhost:5000/public/${post.photo}`}
             alt=""
-          ></img>
+          ></img>)}
         </div>
         <div className="postBottom">
           <div className="postBottomLeft">
-            <img className="likeIcon" src="/assets/like.png" alt=""></img>
-            <img className="likeIcon" src="/assets/images.png" alt=""></img>
-            <span className="postlikeCounter">{post.like}</span>
-          </div>
-          <div className="postBottomRight">
+            {isLiked?(<FavoriteBorder sx={{color:'red'}} onClick={likeHandler}></FavoriteBorder>):(<FavoriteBorder onClick={likeHandler}></FavoriteBorder>)}
+                {/* <FavoriteBorder></FavoriteBorder> */}
+            <span className="postlikeCounter"> {like} people liked</span>
+          </div> 
+          <div className="postBottomRight" onClick={()=>{setOpen(true)}}>
             <span className="postCommentText">{post.comment} comments</span>
           </div>
         </div>
       </div>
+      {open && <CommentBox open={open} setOpen={setOpen} postuserId = {post.userId} postId = {post._id}></CommentBox>}
     </div>
+    
   );
 };
 export default Post;

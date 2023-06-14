@@ -8,6 +8,8 @@ import RequestNotification from "../../pages/RequestNotification/RequestNotifica
 const Topbar = () => {
   const [user, setUser] = useState([]);
   const defaultPic = "/assets/person/default-avatar.jpg";
+  const[searchResults,setSearchResults] = useState([])
+  const[showPopup,setShowPopup] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false);
   const [showForm,setShowForm] = useState(false)
   const[showNotification, setShowNotification] = useState(false)
@@ -37,6 +39,19 @@ const Topbar = () => {
   const requestNotification =()=>{
     setShowNotification((prevState)=>!prevState)
   }
+  const search = (e) =>{
+    console.log(e.target.value)
+      const searchTerm = e.target.value
+      setShowPopup(searchTerm!=="");
+      axios.get(`http://localhost:5000/api/v1/search?name=${searchTerm}`)
+      .then((res)=>{
+        console.log("new reposnse",res.data.data)
+        setSearchResults(res.data.data)
+      }).catch((err)=>{
+        console.log("search error", err)
+      })
+  }
+  console.log("searchresults",searchResults)
   return (
     <>
       <div className="topbarContainer">
@@ -47,10 +62,18 @@ const Topbar = () => {
           <div className="searchbar">
             <Search className="searchIcon"></Search>
             <input
-              placeholder="Search for friend, post or videos"
+              placeholder="Search for friend"
               className="searchInput"
+              onChange={search}
             ></input>
           </div>
+          {showPopup&&(<div className="popupList">
+            {searchResults.map((result)=>(
+              <div className="popupListItem" key={result.id} onClick={()=>{navigate(`/userprofile/${result._id}`)}}>
+                <img src={result.profilepic==="no-photo.jpg"?defaultPic:`http://localhost:5000/public/${result.profilepic}`} alt="" className="popupListImg"></img>
+                <span className="popupListName">{result.name}</span></div>
+            ))}
+          </div>)}
         </div>
         <div className="topbarRight">
           <div className="topbarlinks">
@@ -65,7 +88,7 @@ const Topbar = () => {
               <Person></Person>
               <span className="topbarIconBadge">1</span>
             </div>
-            <div className="topbarIconItem">
+            <div className="topbarIconItem" onClick={()=>{navigate('/messenger')}}>
               <Chat></Chat>
               <span className="topbarIconBadge">2</span>
             </div>
@@ -79,7 +102,7 @@ const Topbar = () => {
               src={
                 user.profilepic === "no-photo.jpg"
                   ? defaultPic
-                  : user.profilepic
+                  : `http://localhost:5000/public/${user.profilepic}`
               }
               alt=""
               className="topbarImg"
