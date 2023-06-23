@@ -62,8 +62,7 @@ const Register = () => {
         userEmail,
         userPassword,
       };
-      axios
-        .post("http://localhost:5000/api/v1/auth/register", user)
+      axios.post(`${process.env.REACT_APP_API_URL}auth/register`,user)
         .then(() => {
           navigate("/");
         })

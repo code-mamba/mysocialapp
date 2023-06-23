@@ -17,10 +17,23 @@ const UserProfile = () => {
   const [user, setUser] = useState([]);
   const [friendsCount, setFriendsCount] = useState("");
   const [post, setPost] = useState([]);
+  const[request,setRequest] = useState(null)
   const [noOfPost, setNoOfPost] = useState("");
-  const defaultPic = "assets/person/default-avatar.jpg";
+  const defaultPic = "/assets/person/default-avatar.jpg";
 
-
+  
+  useEffect(()=>{
+    const myId = sessionStorage.getItem("userId")
+    // this api is to check my id  is in particular user's pending request
+    axios.get(`http://localhost:5000/api/v1/request/${myId}/${userId}`).then((res)=>{
+      if(res.data.message==="requested"){
+        setRequest(true)
+      }
+   
+    }).catch((err)=>{
+      console.log(err)
+    })
+  },[])
    useEffect(()=>{
     const myId = sessionStorage.getItem("userId")
   	axios.get(`http://localhost:5000/api/v1/auth/me/${userId}`).then((res)=>{
@@ -29,7 +42,6 @@ const UserProfile = () => {
       setFriendsCount(res.data.data.friends)
   		axios.get(`http://localhost:5000/api/v1/posts/${userId}`).then((res)=>{
   			setPost(res.data.data);
-        console.log("--------",post)
   			setNoOfPost(res.data.data)
   		}).then(()=>{
         axios.get(`http://localhost:5000/api/v1/getfriends/${myId}/${userId}`).then((response)=>{
@@ -42,15 +54,15 @@ const UserProfile = () => {
         }).catch((err)=>{console.log(err)})
       })
   	}).catch((err)=>{console.log(err)})
-   },[isFriend])
+   },[isFriend,userId])
 
 
   const addFriend = () => {
     const myId = sessionStorage.getItem("userId");
     axios
-      .post(`http://localhost:5000/api/v1/request`, { userId, myId })
+      .post(`http://localhost:5000/api/v1/request/`, { userId, myId })
       .then((res) => {
-        console.log(res);
+        setRequest(true)
       })
       .catch((err) => {
         console.log(err);
@@ -64,9 +76,16 @@ const UserProfile = () => {
         setIsFriend(false)
     })
   };
+  const cancelRequest = () =>{
+    const myId = sessionStorage.getItem('userId')
+    axios.delete(`http://localhost:5000/api/v1/request/${myId}/${userId}`).then(()=>{
+      setRequest(false)
+    })
+
+  }
   const formActive =()=>{
     setIsFriendFormActive((prevState)=>!prevState)
-    console.log(isFriendFormActive)
+  
   }
   return (
     <>
@@ -107,7 +126,8 @@ const UserProfile = () => {
                 </div>
               </div>
               <div className="addFriend-btn">
-                {!isFriend && (
+                {!isFriend && request&&(<button className="cancelRequest" onClick={()=>cancelRequest()}>cancel request</button>)}
+                {!isFriend && !request&&(
                   <Button variant="contained" onClick={() => addFriend()}>
                     <PersonAdd></PersonAdd> Add friend
                   </Button>
@@ -131,7 +151,7 @@ const UserProfile = () => {
           </div>
         </div>
       </div>
-      {isFriendFormActive&&<FriendsForm open = {isFriendFormActive} setOpen={setIsFriendFormActive} userId = {userId} ></FriendsForm>}
+      {isFriendFormActive&&<FriendsForm open = {isFriendFormActive} setOpen={setIsFriendFormActive} userId = {userId} userProfile = {true} ></FriendsForm>}
     </>
   );
 };

@@ -11,7 +11,7 @@ const CommentBox = ({open, setOpen, postuserId, postId}) => {
   const [refresh, setRefresh] = useState(false)
   useEffect(()=>{
 	axios.get(`http://localhost:5000/api/v1/comments/${postId}`).then((res)=>{
-    console.log(res)
+    
     setAllComments(res.data.getComments)
 	})
   },[refresh])
@@ -30,7 +30,7 @@ const CommentBox = ({open, setOpen, postuserId, postId}) => {
   const handleCommentSubmit = () =>{
 	const data = {senderId:myId,comment,postId,postuserId}
 		axios.post('http://localhost:5000/api/v1/comments',data).then((res)=>{
-			console.log(res.data);
+			
 			refreshMethod();
       setComment("")
       

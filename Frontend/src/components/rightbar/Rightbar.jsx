@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import "./rightbar.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const Rightbar = () => {
  
   const myId = sessionStorage.getItem('userId')
+  const navigate = useNavigate()
   const HomeRightbar = () => {
-  
+   
     return (
       <>
         <div className="birthdayContainer">
@@ -15,33 +17,20 @@ const Rightbar = () => {
           </span>
         </div>
         <img className="rightbarAd" src="/assets/ad.jpg" alt=""></img>
-        <h4 className="rightbarTitle">Online Friends</h4>
-        <h4 className="rightbarFriendList">
-          <li className="rightbarFriend">
-            <div className="rightbarProfileImgContainer">
-              <img
-                className="rightbarProfileImg"
-                src="assets/person/3.jpg"
-                alt=""
-              ></img>
-              <span className="rightbarOnline"></span>
-            </div>
-            <span className="rightbarUsername">John Carter</span>
-          </li>
-        </h4>
+
       </>
     );
   };
   const ProfileRightbar = () => {
     const [myFriends, setMyFriends] = useState([]);
     const[userInfo, setUserInfo] = useState([])
-	const defaultPic = "assets/person/default-avatar.jpg";
+	const defaultPic = "/assets/person/default-avatar.jpg";
     useEffect(() => {
       const userId = sessionStorage.getItem("userId");
       axios
         .get(`http://localhost:5000/api/v1/getfriends/${userId}`)
         .then((res) => {
-          console.log("rightbar response", res.data.data);
+      
           setMyFriends(res.data.data);
           
         });
@@ -49,11 +38,10 @@ const Rightbar = () => {
     useEffect(()=>{
      
       axios.get(`http://localhost:5000/api/v1/auth/me/${myId}`).then((res)=>{
-        console.log(res.data.data)
+        
         setUserInfo(res.data.data)
       })
     },[])
-    console.log("line55",userInfo)
     return (
       <>
         <h4 className="rightbarTitle">Your information </h4>
@@ -74,7 +62,7 @@ const Rightbar = () => {
 
           <div className="rightbarFollowings">
             {myFriends.map((friend) => (
-              <div className="rightbarFollowing">
+              <div className="rightbarFollowing" onClick={()=>navigate(`/userprofile/${friend._id}`)}>
                 <img
                   src={ friend.profilepic === "no-photo.jpg"
 				  ? defaultPic

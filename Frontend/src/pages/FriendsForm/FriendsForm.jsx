@@ -7,7 +7,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./friendsform.css";
-const FriendsForm = ({ open, setOpen, userId }) => {
+const FriendsForm = ({ open, setOpen, userId, userProfile }) => {
   const scroll = "paper";
   const [refresh, setRefresh] = useState(false);
   const [friendsData, setFriendsData] = useState([]);
@@ -22,7 +22,6 @@ const FriendsForm = ({ open, setOpen, userId }) => {
       });
   }, [refresh, userId]);
   const refreshMethod = () => {
-    console.log("inside refresh method");
     setRefresh((prevState) => !prevState);
   };
   const unFriend = (userId) => {
@@ -62,7 +61,7 @@ const FriendsForm = ({ open, setOpen, userId }) => {
                     src={
                       data.profilepic === "no-photo.jpg"
                         ? defaultPic
-                        : data.profilepic
+                        : `http://localhost:5000/public/${data.profilepic}`
                     }
                     alt=""
                   ></img>
@@ -74,6 +73,7 @@ const FriendsForm = ({ open, setOpen, userId }) => {
                     unFriend(data._id);
                   }}
                 >
+                  
                   <div className="delete">unfriend</div>
                 </div>
               </div>

@@ -5,6 +5,7 @@ import "./login.css";
 import jwtDecode from "jwt-decode";
 import { GoogleLoginButton } from "react-social-login-buttons";
 import { LoginSocialGoogle } from "reactjs-social-login";
+import { loginUser } from "../../services/authService";
 
 const Login = ({ setisLogedIn }) => {
   const [userEmail, setuserEmail] = useState("");
@@ -18,10 +19,7 @@ const Login = ({ setisLogedIn }) => {
   const navigate = useNavigate();
 
   function validateForm(email, password) {
-    console.log("email", email);
-    console.log("password", password);
-    console.log("emailmatch", email.match(emailPattern));
-    console.log("passwordmatch", password.match(passwordPattern));
+
     if ((email === "") | (email === null)) {
       setEmailErr("Please fill the email field");
     }
@@ -34,32 +32,22 @@ const Login = ({ setisLogedIn }) => {
       return true;
     }
   }
-
   const login = (e) => {
     e.preventDefault();
     if (validateForm(userEmail, userPassword)) {
       setCredErr("Invalid User Name or Password");
     } else {
-      const user = {
-        userEmail,
-        userPassword,
-      };
-      axios
-        .post("http://localhost:5000/api/v1/auth/login", user)
-        .then((res) => {
-          if (res.data.success === true) {
-            const token = res.data.token;
-            const decoded = jwtDecode(token);
-            sessionStorage.setItem("userId", decoded.id );
+      loginUser(userEmail, userPassword)
+        .then((success) => {
+          if (success) {
             setisLogedIn(true);
-            
             navigate("/home");
           } else {
             setisLogedIn(false);
           }
         })
         .catch((error) => {
-          setCredErr(error.response.data.error);
+          setCredErr(error.message);
         });
     }
   };
@@ -123,7 +111,7 @@ const Login = ({ setisLogedIn }) => {
                 discoveryDocs="claims supported"
                 access_type="offline"
                 onResolve={({ provider, data }) => {
-                  console.log(data.picture);
+
                   const user = {
                     userName: data.name,
                     userEmail: data.email,

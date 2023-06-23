@@ -20,13 +20,11 @@ function ForgotPasswordForm() {
       .post('http://localhost:5000/api/v1/auth/forgot-password', { email })
       .then((response) => {
 		alert(response.data.message)
-		console.log(response)
-        // setMessage(response.json());
+		
       })
       .catch((error) => {
 		alert(error)
 		
-        // setMessage(error.response.data.message);
       });
   };
 

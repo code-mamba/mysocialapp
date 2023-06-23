@@ -10,7 +10,6 @@ const SavedPost = () =>{
  	useEffect(()=>{
 		const userId = sessionStorage.getItem('userId')
 		axios.get(`http://localhost:5000/api/v1/saved/${userId}`).then((res)=>{
-			console.log(res.data.data)
 			setSavedPost(res.data.data)
 		})
 	},[])

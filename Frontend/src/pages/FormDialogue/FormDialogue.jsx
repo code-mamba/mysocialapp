@@ -35,8 +35,7 @@ const coverImageChange = (e) =>{
 		formData.append('country',country)
 		formData.append('relationship',relationship)
 		formData.append('dob',dobDate)
-		// formData.append('profilePic',profilePic)
-		// formData.append('coverImg', coverImg)
+	
 		if(profilePic){
 			formData.append('profilePic',profilePic)
 		}

@@ -17,25 +17,30 @@ const SharePhoto = ({
   caption,
   onClose,
   setCaption,
+  currentLocation,
 }) => {
   const [file, setFile] = useState(null);
 
   const handleSubmit = (e) => {
-    console.log("handleSubmit");
+   
     e.preventDefault();
     const formData = new FormData();
     formData.append("userId", userId);
     formData.append("userName", userName);
-    formData.append("caption", caption);
+    if (currentLocation && currentLocation.city) {
+      formData.append("caption", `${caption}@${currentLocation.city}`);
+    } else {
+      formData.append("caption", caption);
+    }
     formData.append("file", file);
     axios
       .post("http://localhost:5000/api/v1/posts", formData)
-      .then(()=>{
-        axios.get(`http://localhost:5000/api/v1/posts${userId}`)
-      }).then((res)=>{
-        window.location.reload()
-        onClose()
-        
+      .then(() => {
+        axios.get(`http://localhost:5000/api/v1/posts${userId}`);
+      })
+      .then((res) => {
+        window.location.reload();
+        onClose();
       })
 
       .catch((error) => {
@@ -43,30 +48,29 @@ const SharePhoto = ({
       });
   };
 
-  
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
+
   return (
     <form className="formContainer">
       <Dialog open={open} onClose={onClose}>
         <DialogTitle></DialogTitle>
         <DialogContent>
           {title}
-            <input
-              className="captionInput"
-              type="text"
-              value={caption}
-              onChange={(e) => setCaption(e.target.value)}
-              placeholder="Add a caption"
-            />
-            <input
-              className="chooseFile"
-              type="file"
-              accept="image/*,video/*"
-              onChange={handleFileChange}
-            ></input>
-       
+          <input
+            className="captionInput"
+            type="text"
+            value={caption}
+            onChange={(e) => setCaption(e.target.value)}
+            placeholder="Add a caption"
+          />
+          <input
+            className="chooseFile"
+            type="file"
+            accept="image/*,video/*"
+            onChange={handleFileChange}
+          ></input>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleSubmit}>Submit</Button>

@@ -9,7 +9,7 @@ const Videos = () =>{
 	useEffect(()=>{
 		axios.get(`http://localhost:5000/api/v1/videos`)
 		.then((res)=>{
-			console.log(res.data.data)
+	
 			setVideos(res.data.data)
 		})
 	},[])

@@ -22,13 +22,11 @@ const ResetPassword = () => {
     const token = urlParams.get("token");
     setToken(token)
     setEmail(email);
-    console.log("email",Email);
-    console.log("token",token)
-    console.log("_id",id)
+
   }, []);
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("inside handlesubmit");
+
     if (password === confirmPassword) {
       const user = {
         password,
@@ -39,14 +37,17 @@ const ResetPassword = () => {
           user
         )
         .then((res) => {
-          console.log("inside .then");
+
           navigate('/')
           
         })
         .catch((err) => {
-          console.log("inside .catch");
+        
           console.log(err);
         });
+    }
+    else{
+      window.alert("Password and confirm password must be same!")
     }
   };
   return (

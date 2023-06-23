@@ -63,3 +63,19 @@
 .addFriend-btn{
 	margin: 5px;
 }
+.cancelRequest{
+	background-color: rgb(206, 206, 206);
+	color: black;
+	padding: 8px 16px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	margin: 5px;
+}
+.cancelRequest:hover {
+	background-color: lightgray;
+  }
+  
+  .cancelRequest:active {
+	background-color: lightgray;
+  }

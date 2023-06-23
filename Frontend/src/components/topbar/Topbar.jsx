@@ -8,12 +8,12 @@ import RequestNotification from "../../pages/RequestNotification/RequestNotifica
 const Topbar = () => {
   const [user, setUser] = useState([]);
   const defaultPic = "/assets/person/default-avatar.jpg";
-  const[searchResults,setSearchResults] = useState([])
-  const[showPopup,setShowPopup] = useState(false)
+  const [searchResults, setSearchResults] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [showForm,setShowForm] = useState(false)
-  const[showNotification, setShowNotification] = useState(false)
-  const[requestCount, setRequestCount] = useState('')
+  const [showForm, setShowForm] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const [requestCount, setRequestCount] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
     const userId = sessionStorage.getItem("userId");
@@ -21,8 +21,7 @@ const Topbar = () => {
       .get(`http://localhost:5000/api/v1/auth/me/${userId}`)
       .then((res) => {
         setUser(res.data.data);
-        setRequestCount(res.data.data.pendingrequest.length)
-        console.log("topbar",res)
+        setRequestCount(res.data.data.pendingrequest.length);
       })
       .catch((err) => {
         console.log("topbar catch", err);
@@ -33,29 +32,29 @@ const Topbar = () => {
     setShowDropdown((prevState) => !prevState);
   };
 
-  const PopupForm = () =>{
-    setShowForm((prevState)=>!prevState)
-  }
-  const requestNotification =()=>{
-    setShowNotification((prevState)=>!prevState)
-  }
-  const search = (e) =>{
-    console.log(e.target.value)
-      const searchTerm = e.target.value
-      setShowPopup(searchTerm!=="");
-      axios.get(`http://localhost:5000/api/v1/search?name=${searchTerm}`)
-      .then((res)=>{
-        console.log("new reposnse",res.data.data)
-        setSearchResults(res.data.data)
-      }).catch((err)=>{
-        console.log("search error", err)
+  const PopupForm = () => {
+    setShowForm((prevState) => !prevState);
+  };
+  const requestNotification = () => {
+    setShowNotification((prevState) => !prevState);
+  };
+  const search = (e) => {
+    const searchTerm = e.target.value;
+    setShowPopup(searchTerm !== "");
+    axios
+      .get(`http://localhost:5000/api/v1/search?name=${searchTerm}`)
+      .then((res) => {
+        setSearchResults(res.data.data);
       })
-  }
-  console.log("searchresults",searchResults)
+      .catch((err) => {
+        console.log("search error", err);
+      });
+  };
+
   return (
     <>
       <div className="topbarContainer">
-        <div className="topbarLeft" onClick={()=>navigate('/home')}>
+        <div className="topbarLeft" onClick={() => navigate("/home")}>
           <span className="logo">MyFB</span>
         </div>
         <div className="topbarRight">
@@ -67,32 +66,56 @@ const Topbar = () => {
               onChange={search}
             ></input>
           </div>
-          {showPopup&&(<div className="popupList">
-            {searchResults.map((result)=>(
-              <div className="popupListItem" key={result.id} onClick={()=>{navigate(`/userprofile/${result._id}`)}}>
-                <img src={result.profilepic==="no-photo.jpg"?defaultPic:`http://localhost:5000/public/${result.profilepic}`} alt="" className="popupListImg"></img>
-                <span className="popupListName">{result.name}</span></div>
-            ))}
-          </div>)}
+          {showPopup && (
+            <div className="popupList">
+              {searchResults.map((result) => (
+                <div
+                  className="popupListItem"
+                  key={result.id}
+                  onClick={() => {
+                    navigate(`/userprofile/${result._id}`);
+                  }}
+                >
+                  <img
+                    src={
+                      result.profilepic === "no-photo.jpg"
+                        ? defaultPic
+                        : `http://localhost:5000/public/${result.profilepic}`
+                    }
+                    alt=""
+                    className="popupListImg"
+                  ></img>
+                  <span className="popupListName">{result.name}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         <div className="topbarRight">
-          <div className="topbarlinks">
-            <span className="topbarlink">Homepage</span>
-            <span className="topbarlink">Timeline</span>
-          </div>
+          <div className="topbarlinks"></div>
           <div className="topbarIcons">
             <div
               className="topbarIconItem"
               onClick={() => navigate("/myProfile")}
             >
               <Person></Person>
-              <span className="topbarIconBadge">1</span>
+              <span></span>
             </div>
-            <div className="topbarIconItem" onClick={()=>{navigate('/messenger')}}>
+            <div
+              className="topbarIconItem"
+              onClick={() => {
+                navigate("/messenger");
+              }}
+            >
               <Chat></Chat>
-              <span className="topbarIconBadge">2</span>
+              <span></span>
             </div>
-            <div className="topbarIconItem" onClick={()=>{requestNotification()}}>
+            <div
+              className="topbarIconItem"
+              onClick={() => {
+                requestNotification();
+              }}
+            >
               <Notifications></Notifications>
               <span className="topbarIconBadge">{requestCount}</span>
             </div>
@@ -111,12 +134,19 @@ const Topbar = () => {
         </div>
       </div>
       {showDropdown && (
-        <span className="profile-dropdown" onClick={()=>PopupForm()}> 
+        <span className="profile-dropdown" onClick={() => PopupForm()}>
           Edit profile
         </span>
       )}
-      {showForm&&<FormDialogue open={showForm} setOpen = {setShowForm}></FormDialogue>}
-      {showNotification&&<RequestNotification open={showNotification} setOpen = {setShowNotification} ></RequestNotification>}
+      {showForm && (
+        <FormDialogue open={showForm} setOpen={setShowForm}></FormDialogue>
+      )}
+      {showNotification && (
+        <RequestNotification
+          open={showNotification}
+          setOpen={setShowNotification}
+        ></RequestNotification>
+      )}
     </>
   );
 };

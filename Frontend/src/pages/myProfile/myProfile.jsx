@@ -24,7 +24,7 @@ const Profile = () => {
       setFollowersCount(res.data.data.friends.length);
       setUser(res.data.data);
     });
-    console.log("hello");
+
     axios.get(`http://localhost:5000/api/v1/posts/${userId}`).then((res) => {
       setMyPosts(res.data.data);
       setPostCount(res.data.count)
@@ -38,7 +38,7 @@ const Profile = () => {
       setShowPopup(false);
     }
   };
-  console.log(user.profilepic);
+ 
 
   const formActive =()=>{
     setIsFriendFormActive((prevState)=>!prevState)

@@ -1,37 +1,62 @@
 import "./post.css";
 import { MoreHoriz,FavoriteBorder} from "@mui/icons-material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {format} from 'timeago.js'
 import CommentBox from "../../pages/CommentBox/CommentBox";
+
+
 const Post = ({ post, myPosts, setPosts, savedPost }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const[open, setOpen] = useState(false) 
-  const[isLiked,setIsLiked] = useState(false)
+  const[isLiked,setIsLiked] = useState(null)
   const[like, setLike] = useState(post.likedby.length)
   const navigate = useNavigate();
   const toggleDropdown = () => {
     setShowDropdown((prevState) => !prevState);
   };
+  const myId = sessionStorage.getItem("userId")
 
+
+  /* this useEffect calls an api it returns a response whether the current user already liked the particular post, 
+   it returns whether the current user's id is present in post's likedby array so that's why I'm sending the current user id
+   and post's id. if the data is there means I'm setting isliked(true) else false
+  */
+    useEffect(()=>{
+      axios.get(`http://localhost:5000/api/v1/likes/${post._id}/${myId}`).then((res)=>{
+        res.data.isLiked.length===0?setIsLiked(false):setIsLiked(true)
+      }).catch((err)=>{
+        console.log(err)
+      })
+    },[])
+
+/*this `likehandler` method triggers when the user clicks the like icon it will set the `like` state to increment by 1 when the isliked is false.
+ else setlike to decrement by 1 when the isliked is true and then change the state of isLiked to opposite boolean and it will calls the api according to the boolean*/
   const likeHandler = () =>{
     setLike(isLiked?like-1:like+1)
     setIsLiked(!isLiked)
     if(isLiked === true){
-      console.log("unlike your post")
+      
+      axios.post('http://localhost:5000/api/v1/likes',{postId:post._id,userId:myId}).then((res)=>{
+       
+      }).catch((err)=>{console.log(err)})
+      
     }
     else if(isLiked === false){
-      console.log("like your post")
+      
+      axios.post(`http://localhost:5000/api/v1/likes/${post._id}/${myId}`).then((res)=>{
+      
+      }).catch((err)=>{console.log(err)})
     }
   }
+
+  /*this `handleSave` method is used to add current user'id into the post's savedby array  */
   const handleSave = async () => {
-    const myUserId = sessionStorage.getItem("userId");
+   
     const postId = post._id;
-    console.log("myuserId", myUserId);
-    console.log("postId", postId);
     await axios
-      .post(`http://localhost:5000/api/v1/saved/${myUserId}`, { postId })
+      .post(`http://localhost:5000/api/v1/saved/${myId}`, { postId })
       .then((res) => {
         console.log("successfully saved");
       })
@@ -39,17 +64,22 @@ const Post = ({ post, myPosts, setPosts, savedPost }) => {
         console.log(err);
       });
   };
+
+  /*This `handleDeletePost` method is used to delete the current user's post,
+  so it first checks the id of current user's id and post's userid if the both id is equal means 
+  this function allows us to delete the particular post
+  */
   const handleDeletePost = async () => {
-    const myUserId = sessionStorage.getItem("userId");
-    if (post.userId === myUserId) {
+   
+    if (post.userId === myId) {
       try {
         await axios
           .delete(`http://localhost:5000/api/v1/posts/${post._id}`)
           .then(() => {
             axios
-              .get(`http://localhost:5000/api/v1/posts/${myUserId}`)
+              .get(`http://localhost:5000/api/v1/posts/${myId}`)
               .then((res) => {
-                console.log(res.data.data);
+                
                 setPosts(res.data.data);
               });
           });
@@ -78,18 +108,16 @@ const Post = ({ post, myPosts, setPosts, savedPost }) => {
   const navigateToUserProfile = () => {
     const myId = sessionStorage.getItem("userId");
     if (post.userId === myId) {
-      console.log(post._id)
-      console.log(myId)
       navigate("/myprofile");
     } else {
-      console.log(post._id)
-      console.log(myId)
+    
       navigate(`/userprofile/${post.userId}`);
     }
   };
   if (!post) {
     return null;
   }
+
   return (
     <div className="post">
       <div className="postWrapper">
@@ -110,7 +138,6 @@ const Post = ({ post, myPosts, setPosts, savedPost }) => {
                 <div className="dropdown">
                   <ul>
                     <li onClick={handleDeletePost}>Delete</li>
-                    <li>Edit</li>
                   </ul>
                 </div>
               )}
@@ -148,7 +175,6 @@ const Post = ({ post, myPosts, setPosts, savedPost }) => {
         <div className="postBottom">
           <div className="postBottomLeft">
             {isLiked?(<FavoriteBorder sx={{color:'red'}} onClick={likeHandler}></FavoriteBorder>):(<FavoriteBorder onClick={likeHandler}></FavoriteBorder>)}
-                {/* <FavoriteBorder></FavoriteBorder> */}
             <span className="postlikeCounter"> {like} people liked</span>
           </div> 
           <div className="postBottomRight" onClick={()=>{setOpen(true)}}>

@@ -8,31 +8,39 @@ const Share = () => {
   const [user, setUser] = useState([]);
   const [isSharePost, setisSharePost] = useState(false);
   const [caption, setCaption] = useState("")
+  const [currentLocation, setCurrentLocation] = useState({})
   const defaultProfile = '/assets/person/default-avatar.jpg'
   useEffect(() => {
-	console.log("beforclick",isSharePost)
+
     const userId = sessionStorage.getItem("userId");
     axios
       .get(`http://localhost:5000/api/v1/auth/me/${userId}`)
       .then((res) => {
         setUser(res.data.data);
-        console.log("userstate", user);
-        console.log("share", res);
       })
       .catch((err) => {
         console.log("share catch", err);
       });
   }, []);
+
+  const getLocation = async () =>{
+
+    const location = await axios.get('https://ipapi.co/json')
+    setisSharePost(true)
+    setCurrentLocation(location.data)
+  
+  }
   const formControl = () => {
 	
     if (isSharePost === false) {
       setisSharePost(true);
-      console.log(isSharePost);
+      
     } else if (isSharePost === true) {
       setisSharePost(false);
-      console.log(isSharePost);
+      
     }
   };
+
   return (
     <div className="share">
       <div className="shareWrapper">
@@ -67,7 +75,7 @@ const Share = () => {
             </div>
             <div className="shareOption">
               <Room htmlColor="green" className="shareIcon"></Room>
-              <span className="shareOptionText">Location</span>
+              <span className="shareOptionText" onClick={()=>getLocation()}>Location</span>
             </div>
             <div className="shareOption">
               <EmojiEmotions
@@ -77,7 +85,7 @@ const Share = () => {
               <span className="shareOptionText">Feelings</span>
             </div>
           </div>
-          <button className="shareButton">Share</button>
+          <button className="shareButton" onClick ={()=>formControl()}>Share</button>
         </div>
 		{isSharePost && <SharePhoto open={isSharePost}
           title="share something"
@@ -85,7 +93,11 @@ const Share = () => {
           setCaption = {setCaption}
           userId={user._id}
           userName={user.name}
-          onClose={formControl}></SharePhoto>}
+          currentLocation = {currentLocation}
+          onClose={formControl}></SharePhoto>
+          
+          }
+          
       </div>
 	  
     </div>
