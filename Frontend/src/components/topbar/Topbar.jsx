@@ -15,8 +15,9 @@ const Topbar = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [requestCount, setRequestCount] = useState("");
   const navigate = useNavigate();
+  const userId = sessionStorage.getItem("userId");
   useEffect(() => {
-    const userId = sessionStorage.getItem("userId");
+   
     axios
       .get(`http://localhost:5000/api/v1/auth/me/${userId}`)
       .then((res) => {
@@ -73,7 +74,13 @@ const Topbar = () => {
                   className="popupListItem"
                   key={result.id}
                   onClick={() => {
-                    navigate(`/userprofile/${result._id}`);
+                    if(userId === result._id){
+                      navigate('/myprofile')
+                    }
+                    else{
+                      navigate(`/userprofile/${result._id}`);
+                    }
+                    
                   }}
                 >
                   <img

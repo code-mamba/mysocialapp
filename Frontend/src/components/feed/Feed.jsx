@@ -6,6 +6,7 @@ import "./feed.css";
 const Feed = ({ myPosts, savedPost, userPost, friendsPost, videos }) => {
   const [posts, setPosts] = useState([]);
 
+
   useEffect(() => {
     if (myPosts) {
       setPosts(myPosts);

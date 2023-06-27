@@ -16,6 +16,7 @@ import FriendsPost from "../pages/FriendsPost/FriendsPost";
 import Messenger from "../pages/Messenger/Messenger";
 import Videos from "../pages/Videos/Videos";
 import CommentBox from "../pages/CommentBox/CommentBox";
+import PageNotFound from "../pages/404/404";
 
 
 const RoutePage = () => {
@@ -42,6 +43,7 @@ const RoutePage = () => {
       <Route path="/videos" element={<Videos></Videos>} ></Route>
       <Route path="/messenger" element={<Messenger></Messenger>}></Route>
       <Route path="/comments" element={<CommentBox></CommentBox>}></Route>
+      <Route path="*" element={<PageNotFound></PageNotFound>}></Route>
     </Routes>
   );
 };

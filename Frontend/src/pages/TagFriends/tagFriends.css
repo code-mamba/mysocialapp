@@ -1,0 +1,25 @@
+.friendsList {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	overflow: auto;
+  }
+  
+  .friendItem {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+  }
+  
+  .profileImg {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	object-fit: cover;
+  }
+  
+  .friendName {
+	margin-left: 10px;
+	font-weight: bold;
+  }
+  

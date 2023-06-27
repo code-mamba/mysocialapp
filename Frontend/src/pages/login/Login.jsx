@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./login.css";
@@ -51,6 +51,11 @@ const Login = ({ setisLogedIn }) => {
         });
     }
   };
+  useEffect(()=>{
+    if(sessionStorage.getItem('userId')){
+      navigate('/home')
+    }
+  },[])
 
   return (
     <div className="login">

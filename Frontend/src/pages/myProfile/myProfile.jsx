@@ -21,7 +21,7 @@ const Profile = () => {
   useEffect(() => {
     const userId = sessionStorage.getItem("userId");
     axios.get(`http://localhost:5000/api/v1/auth/me/${userId}`).then((res) => {
-      setFollowersCount(res.data.data.friends.length);
+      setFollowersCount(res.data.data.friends);
       setUser(res.data.data);
     });
 
@@ -83,7 +83,7 @@ const Profile = () => {
                     <span class="profile-stat-count"><strong>{postCount}</strong>posts</span>
                   </div>
                   <div onClick={()=>{formActive()}}>
-                    <span class="profile-stat-count"  ><strong>{followersCount}</strong>friends</span>
+                    <span class="profile-stat-count"  ><strong>{followersCount.length}</strong>friends</span>
                   </div>
          
               </div>

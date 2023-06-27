@@ -4,7 +4,9 @@ import Feed from "../../components/feed/Feed";
 import Rightbar from "../../components/rightbar/Rightbar";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Topbar from "../../components/topbar/Topbar";
+import { useNavigate } from "react-router-dom";
 const Home =()=>{
+
 return(
 		<>
 		<Topbar></Topbar>

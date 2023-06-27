@@ -2,25 +2,44 @@ import { useEffect, useState } from "react";
 import "./rightbar.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-const Rightbar = () => {
+const HomeRightbar = () => {
+  const [myFriendsbday, setMyFriendsbday] = useState([])
+  const [showRemaining, setShowRemaining] = useState(false);
+  useEffect(()=>{
+    const myId = sessionStorage.getItem("userId")
+    axios.get('http://localhost:5000/api/v1/users/'+myId).then((res)=>{
+      console.log("Home rightbar", res.data)
+      setMyFriendsbday(res.data.data)
+    })
+  },[])
  
+  return (
+    <>
+    
+      <div className="birthdayContainer">
+        {myFriendsbday.length>0 &&(<>
+          <img className="birthdayImg" src="/assets/gift.png" alt=""></img>
+        <span className="birthdayText">
+          {myFriendsbday.map((friend,index)=>(
+            <span key={friend._id}>
+              <b>{friend.name}</b> {index !== myFriendsbday.length - 1 && ','}
+            </span>
+          ))}
+          {' '} have a birthday today
+        </span>
+        </>)}
+    
+      </div>
+      <img className="rightbarAd" src="/assets/ad.jpg" alt=""></img>
+
+    </>
+  );
+};
+const Rightbar = () => {
+
   const myId = sessionStorage.getItem('userId')
   const navigate = useNavigate()
-  const HomeRightbar = () => {
-   
-    return (
-      <>
-        <div className="birthdayContainer">
-          <img className="birthdayImg" src="/assets/gift.png" alt=""></img>
-          <span className="birthdayText">
-            <b>Madee</b> and <b>3 other friends</b> have a birthday today
-          </span>
-        </div>
-        <img className="rightbarAd" src="/assets/ad.jpg" alt=""></img>
 
-      </>
-    );
-  };
   const ProfileRightbar = () => {
     const [myFriends, setMyFriends] = useState([]);
     const[userInfo, setUserInfo] = useState([])

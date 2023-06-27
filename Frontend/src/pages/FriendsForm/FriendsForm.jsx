@@ -2,17 +2,20 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./friendsform.css";
 const FriendsForm = ({ open, setOpen, userId, userProfile }) => {
   const scroll = "paper";
-  const [refresh, setRefresh] = useState(false);
+  const [refresh, setRefresh] = useState(null);
+  const[request,setRequest] = useState(null)
   const [friendsData, setFriendsData] = useState([]);
-  const defaultPic = "assets/person/default-avatar.jpg";
+  const defaultPic = "/assets/person/default-avatar.jpg";
 
+
+
+  
   useEffect(() => {
     axios
       .get(`http://localhost:5000/api/v1/getfriends/${userId}`)
@@ -24,6 +27,18 @@ const FriendsForm = ({ open, setOpen, userId, userProfile }) => {
   const refreshMethod = () => {
     setRefresh((prevState) => !prevState);
   };
+    const addFriend = (myId,userId) => {
+    console.log(myId,userId)
+    axios
+      .post(`http://localhost:5000/api/v1/request/`, { userId, myId })
+      .then((res) => {
+          refreshMethod()
+
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const unFriend = (userId) => {
     const myId = sessionStorage.getItem("userId");
     axios
@@ -32,9 +47,40 @@ const FriendsForm = ({ open, setOpen, userId, userProfile }) => {
         refreshMethod();
       });
   };
+  const cancelRequest = (myId,userId) =>{
+    axios.delete(`http://localhost:5000/api/v1/request/${myId}/${userId}`).then(()=>{
+      refreshMethod()
+    }).catch((err)=>{console.log(err)})
+
+  }
   const close = () => {
     setOpen(false);
   };
+
+  const renderButton = (data) =>{
+    const myId = sessionStorage.getItem("userId")
+    if(data.friends.includes(myId)){
+      return(
+        <div className="button-block" onClick={() => unFriend(data._id)}>
+          <div className="delete">Unfriend</div>
+        </div>
+      )
+    }
+    else if(data.pendingrequest.includes(myId)){
+      return(
+        <div>
+          <div className="cancelRequest" onClick={()=>{cancelRequest(myId,data._id)}}>cancel request</div>
+        </div>
+      )
+    }
+    else{
+      return(
+        <div className="button-block" onClick={()=>{addFriend(myId,data._id)}}>
+        <div className="add">Add Friend</div>
+      </div>
+      )
+    }
+  }
   console.log("friendform", userId);
   return (
     <>
@@ -65,23 +111,14 @@ const FriendsForm = ({ open, setOpen, userId, userProfile }) => {
                     }
                     alt=""
                   ></img>
-                  <b>{data.name}</b> <br /> <span>14 mutual friends</span>
+                  <b>{data.name}</b> <br /> 
                 </p>
-                <div
-                  className="button-block"
-                  onClick={() => {
-                    unFriend(data._id);
-                  }}
-                >
-                  
-                  <div className="delete">unfriend</div>
-                </div>
+                {renderButton(data)}
+     
               </div>
             ))
           )}
-          {/* {friendsData.map((data) => (
-          
-          ))} */}
+
         </DialogContent>
         <DialogActions>
           <Button onClick={() => close()}>Close</Button>
