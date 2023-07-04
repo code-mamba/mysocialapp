@@ -2,8 +2,10 @@
 	flex: 3.5;
 	height: calc(100vh - 50px);
 	overflow-y: scroll;
+	background-color: rgb(233, 228, 228);
 }
 .feedWrapper{
 	padding: 20px;
+	background-color:  rgb(233, 228, 228);
 	
 }

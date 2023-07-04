@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { format } from "timeago.js";
 import CommentBox from "../../pages/CommentBox/CommentBox";
 import AlertBox from "../../pages/AlertBox/AlertBox";
+import { Snackbar } from "@mui/material";
 
 const Post = ({ post, myPosts, setPosts, savedPost }) => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -13,6 +14,8 @@ const Post = ({ post, myPosts, setPosts, savedPost }) => {
   const [isLiked, setIsLiked] = useState(null);
   const [like, setLike] = useState(post.likedby.length);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+  const[openSnackbar, setOpenSnackbar] = useState(false)
+  const [message,setMessage] = useState('')
 
   const navigate = useNavigate();
   const toggleDropdown = () => {
@@ -62,14 +65,23 @@ const Post = ({ post, myPosts, setPosts, savedPost }) => {
 
   /*this `handleSave` method is used to add current user'id into the post's savedby array  */
   const handleSave = async () => {
+    setOpenSnackbar(false)
     const postId = post._id;
     await axios
       .post(`http://localhost:5000/api/v1/saved/${myId}`, { postId })
       .then((res) => {
-        console.log("successfully saved");
+        console.log("before save", openSnackbar)
+        setOpenSnackbar(true)
+        console.log("after setOpenSnackbar", openSnackbar);
+        setMessage("saved successfully")
+        console.log("after setMessage", openSnackbar);
+        
+        
       })
       .catch((err) => {
-        console.log(err);
+        setOpenSnackbar(true)
+        setMessage("unable to save")
+        
       });
   };
 
@@ -78,38 +90,56 @@ const Post = ({ post, myPosts, setPosts, savedPost }) => {
   this function allows us to delete the particular post
   */
   const handleDeletePost = async () => {
+    setOpenSnackbar(false)
     if (post.userId === myId) {
       try {
         await axios
           .delete(`http://localhost:5000/api/v1/posts/${post._id}`)
+
           .then(() => {
             axios
               .get(`http://localhost:5000/api/v1/posts/${myId}`)
               .then((res) => {
                 setPosts(res.data.data);
                 setIsDeleteAlertOpen(!isDeleteAlertOpen)
+                setOpenSnackbar(true)
+                setMessage("Post Deleted Successfully")
+                console.log("openSnackbar",openSnackbar)
+               
               });
           });
       } catch (error) {
         console.log(error);
+        setOpenSnackbar(true)
+        setMessage("Error deleting post.")
       }
     }
   };
   const unSave = async () => {
+    
     const userId = sessionStorage.getItem("userId");
     const postId = post._id;
     try {
       axios
         .post("http://localhost:5000/api/v1/saved/", { userId, postId })
         .then(() => {
+          console.log("before unsave",openSnackbar)
           axios
             .get(`http://localhost:5000/api/v1/saved/${userId}`)
             .then((res) => {
+              setOpenSnackbar(true);
               setPosts(res.data.data);
+              setMessage("post unsaved")
+              console.log("after un save openSnackbar",openSnackbar)
+              setOpenSnackbar(false)
             });
+        }).catch((error)=>{
+      setOpenSnackbar(true)
+          setMessage("something went wrong")
         });
     } catch (error) {
-      console.log(error);
+      setOpenSnackbar(true)
+      setMessage("something went wrong")
     }
   };
   const navigateToUserProfile = () => {
@@ -219,6 +249,12 @@ const Post = ({ post, myPosts, setPosts, savedPost }) => {
           handleDeletePost={handleDeletePost}
         />
       )}
+       <Snackbar open={openSnackbar} autoHideDuration={1000}
+        onClose={()=>setOpenSnackbar(false)}
+        anchorOrigin={{vertical:'bottom',horizontal:'center'}}
+        message={<span>{message}</span>}
+        ></Snackbar>
+        
     </div>
   );
 };

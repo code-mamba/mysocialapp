@@ -7,6 +7,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
 import './FormDialogue.css'
 import {useState} from 'react';
+import { Snackbar } from "@mui/material";
 const FormDialogue = ({open,setOpen}) =>{
 	const[bio,setBio] = useState('')
 	const[name, setName] = useState('')
@@ -16,6 +17,7 @@ const FormDialogue = ({open,setOpen}) =>{
 	const[country,setCountry] = useState('')
 	const[relationship, setRelationship] = useState('')
 	const[Dob,setDob] = useState(null)
+	
 	const handleClose = () => {
 		setOpen(false);
 	  };
@@ -45,7 +47,9 @@ const coverImageChange = (e) =>{
 		try{
 			const myId = sessionStorage.getItem('userId')
 			axios.post(`http://localhost:5000/api/v1/users/${myId}`,formData)
+		
 			setOpen(false)
+		
 			
 			
 		}
@@ -118,6 +122,7 @@ const coverImageChange = (e) =>{
 			<Button onClick={handleSubmit}>Submit</Button>
 		  </DialogActions>
 		</Dialog>
+	
 	  </div>
 	)
 }

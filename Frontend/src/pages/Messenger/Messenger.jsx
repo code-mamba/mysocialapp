@@ -114,6 +114,7 @@ const Messenger = () => {
             <input
               placeholder="Search for friends"
               className="chatMenuInput"
+             
             ></input>
             <Conversation
               myFriends={myFriends}

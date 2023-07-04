@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 const HomeRightbar = () => {
   const [myFriendsbday, setMyFriendsbday] = useState([])
   const [showRemaining, setShowRemaining] = useState(false);
+  const navigate = useNavigate()
   useEffect(()=>{
     const myId = sessionStorage.getItem("userId")
     axios.get('http://localhost:5000/api/v1/users/'+myId).then((res)=>{
@@ -21,7 +22,7 @@ const HomeRightbar = () => {
           <img className="birthdayImg" src="/assets/gift.png" alt=""></img>
         <span className="birthdayText">
           {myFriendsbday.map((friend,index)=>(
-            <span key={friend._id}>
+            <span key={friend._id} onClick={()=>{navigate(`/userprofile/${friend._id}`)}}>
               <b>{friend.name}</b> {index !== myFriendsbday.length - 1 && ','}
             </span>
           ))}

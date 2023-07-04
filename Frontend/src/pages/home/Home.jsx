@@ -5,12 +5,15 @@ import Rightbar from "../../components/rightbar/Rightbar";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Topbar from "../../components/topbar/Topbar";
 import { useNavigate } from "react-router-dom";
+
 const Home =()=>{
 
 return(
 		<>
 		<Topbar></Topbar>
+		
 		<div className="homeContainer">
+		
 		<Sidebar></Sidebar>
 		<Feed></Feed>
 		<Rightbar></Rightbar>

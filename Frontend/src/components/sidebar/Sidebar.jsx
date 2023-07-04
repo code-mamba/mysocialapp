@@ -3,7 +3,7 @@ import { Groups, Bookmark, Chat, PlayCircle, Home } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 const Sidebar = () => {
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState(null);
@@ -13,6 +13,7 @@ const Sidebar = () => {
       sessionStorage.clear();
       Cookies.remove("token");
       navigate("/");
+      
     });
   };
 

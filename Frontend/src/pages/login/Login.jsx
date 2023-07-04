@@ -6,6 +6,8 @@ import jwtDecode from "jwt-decode";
 import { GoogleLoginButton } from "react-social-login-buttons";
 import { LoginSocialGoogle } from "reactjs-social-login";
 import { loginUser } from "../../services/authService";
+import { Snackbar } from "@mui/material";
+
 
 const Login = ({ setisLogedIn }) => {
   const [userEmail, setuserEmail] = useState("");
@@ -17,6 +19,8 @@ const Login = ({ setisLogedIn }) => {
   const passwordPattern =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
   const navigate = useNavigate();
+  const[openSnackbar, setOpenSnackbar] = useState(false)
+  const [message,setMessage] = useState('')
 
   function validateForm(email, password) {
 
@@ -41,19 +45,27 @@ const Login = ({ setisLogedIn }) => {
         .then((success) => {
           if (success) {
             setisLogedIn(true);
-            navigate("/home");
+            setOpenSnackbar(true);
+            setMessage("Logged in successfully")
+            setTimeout(() => {;
+              navigate("/home");
+            }, 500);
+            
           } else {
             setisLogedIn(false);
           }
         })
         .catch((error) => {
           setCredErr(error.message);
+          setOpenSnackbar(true);
+          setMessage("something went wrong")
         });
     }
   };
   useEffect(()=>{
     if(sessionStorage.getItem('userId')){
       navigate('/home')
+
     }
   },[])
 
@@ -147,6 +159,11 @@ const Login = ({ setisLogedIn }) => {
           </form>
         </div>
       </div>
+        <Snackbar open={openSnackbar} autoHideDuration={1000}
+        onClose={()=>setOpenSnackbar(false)}
+        anchorOrigin={{vertical:'bottom',horizontal:'center'}}
+        message={<span>{message}</span>}
+        ></Snackbar>
     </div>
   );
 };

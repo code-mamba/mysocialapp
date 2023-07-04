@@ -1,7 +1,7 @@
 .sidebar {
 	flex: 2;
 	height: calc(100vh - 50px);
-	background-color: white;
+	background-color:  rgb(233, 228, 228);
 	overflow-y: scroll;
 
 }
@@ -20,6 +20,7 @@
 
 .sidebarWrapper {
 	padding: 20px;
+	background-color:  rgb(233, 228, 228);
 
 }
 
